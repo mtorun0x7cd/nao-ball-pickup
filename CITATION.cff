@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+title: NAO Ball Pickup
+message: If you use this software, please cite it using the metadata below.
+type: software
+abstract: >-
+  A perception-action pipeline for the SoftBank NAO humanoid robot that detects
+  a colored ball with HSV color segmentation, tracks it with proportional head
+  control, and executes a 23-joint keyframe pickup motion authored in
+  Choregraphe. Vision runs on VGA frames from the robot's bottom camera via the
+  NAOqi SDK, with an event-driven architecture decoupling acquisition,
+  detection, and actuation. Developed as a team project at TH Köln (Cologne
+  University of Applied Sciences).
+authors:
+  - given-names: Mert
+    family-names: Torun
+    email: info@mtorun0x7cd.com
+    affiliation: TH Köln
+version: 1.0.0
+date-released: 2022-02-28
+license: MIT
+repository-code: https://github.com/mtorun0x7cd/nao-ball-pickup
+url: https://github.com/mtorun0x7cd/nao-ball-pickup
+keywords:
+  - nao-robot
+  - humanoid-robotics
+  - computer-vision
+  - opencv
+  - naoqi
+  - keyframe-animation
+  - robotics
+  - python
+  - academic-project
