@@ -34,7 +34,7 @@ jobs:
         run: zip -r nao-ball-pickup.zip src docs LICENSE README.md
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: nao-ball-pickup
           path: nao-ball-pickup.zip
