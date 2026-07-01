@@ -51,7 +51,7 @@ The committed source is preserved as-is from its student-project state. It targe
 
 The system follows a pipeline architecture with event-driven data flow between decoupled components:
 
-```
+```text
 ┌─────────────┐     ImageEvent      ┌─────────────────┐    followBall()    ┌───────────────┐
 │ VideoStream │ ──────────────────► │   Recognition   │ ─────────────────► │ Head Tracking │
 │  (Thread)   │   fire(image,w,h)   │  HSV + Contours │   setHeadAngle()   │ (P, Yaw/Pitch)│
@@ -81,7 +81,7 @@ graph LR
 ### Component Breakdown
 
 | Module | Responsibility |
-|--------|---------------|
+| -------- | --------------- |
 | `main.py` | Entry point — instantiates `Robot` and `Recognition`, starts the pipeline |
 | `robot.py` | NAOqi proxy management, head angle control, 23-joint pickup keyframe sequence |
 | `VideoStream.py` | Threaded camera subscription via `ALVideoDevice`, frame acquisition, event dispatch |
@@ -119,7 +119,7 @@ Design-time intermediate poses are tabulated in [the joint-positions reference](
 ## Tech Stack
 
 | Category | Technologies |
-|----------|-------------|
+| ---------- | ------------- |
 | Language | Python 2.7.0 |
 | Vision | OpenCV 4.2.0, NumPy, Pillow, imutils |
 | Robot SDK | NAOqi (`ALMotion`, `ALVideoDevice`, `ALRobotPosture`, `ALMemory`) |
@@ -130,7 +130,7 @@ Design-time intermediate poses are tabulated in [the joint-positions reference](
 
 ## Project Structure
 
-```
+```text
 nao-ball-pickup/
 ├── src/
 │   ├── main.py            # Entry point
@@ -170,14 +170,17 @@ pip install opencv-python numpy Pillow imutils
 ### Configuration
 
 1. Set the robot IP address in `src/main.py`:
+
    ```python
    robot = Robot("<robot-ip>", 9559)
    ```
 
 2. (Optional) Calibrate ball color thresholds using the HSV tool:
+
    ```bash
    python src/tools/checkHSV.py -f HSV -w -p
    ```
+
    Then update `HSV_MIN` and `HSV_MAX` in `src/recognition.py`.
 
 ### Run
@@ -190,7 +193,7 @@ python src/main.py
 ## Documentation
 
 | Document | Description |
-|----------|-------------|
+| ---------- | ------------- |
 | [Report.pdf](docs/Report.pdf) | Full technical report covering design, implementation, and results |
 | [Project presentation.pdf](docs/Project%20presentation.pdf) | Slide deck summarizing the approach and findings |
 | [Project idea.pdf](docs/Project%20idea.pdf) | Initial project proposal |
