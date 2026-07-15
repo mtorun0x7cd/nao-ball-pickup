@@ -75,7 +75,7 @@ The system follows a pipeline architecture with event-driven data flow between d
 ### Signal Flow Diagram
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#FFFDE7', 'edgeColor': '#FBC02D', 'primaryBorderColor': '#F57F17', 'lineColor': '#FBC02D', 'textColor': '#3E2723' }}}%%
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#EFF6FF', 'edgeColor': '#2563EB', 'primaryBorderColor': '#2563EB', 'lineColor': '#2563EB', 'textColor': '#0F172A' }}}%%
 graph LR
     Camera[NAO bottom camera] --> OpenCV[OpenCV circle detection]
     OpenCV --> Error[pixel-error computation]

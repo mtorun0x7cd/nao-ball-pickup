@@ -2,7 +2,7 @@
     <defs>
         <!-- Filter for glow effect -->
         <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="var(--accent-robot)" flood-opacity="var(--glow-opacity)"/>
+            <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="var(--accent)" flood-opacity="var(--glow-opacity)"/>
         </filter>
     </defs>
 
@@ -11,37 +11,29 @@
             --text-title: #0f172a;
             --text-subtitle: #475569;
             --text-badge: #475569;
-            --accent-robot: #1f70b0;
-            --accent-ball: #d81159;
+            --accent: #2563eb;
             --badge-border: #cbd5e1;
             --glow-opacity: 0.05;
         }
         @media (prefers-color-scheme: dark) {
             :root {
                 --text-title: #ffffff;
-                --text-subtitle: #a0aec0;
-                --text-badge: #718096;
-                --accent-robot: #3776AB;
-                --accent-ball: #ff4785;
-                --badge-border: #2C3E50;
+                --text-subtitle: #94a3b8;
+                --text-badge: #64748b;
+                --accent: #60a5fa;
+                --badge-border: #334155;
                 --glow-opacity: 0.25;
             }
         }
         .bg-border {
-            stroke: var(--accent-robot);
+            stroke: var(--accent);
             stroke-opacity: 0.15;
         }
-        .robot-stroke {
-            stroke: var(--accent-robot);
+        .accent-stroke {
+            stroke: var(--accent);
         }
-        .robot-fill {
-            fill: var(--accent-robot);
-        }
-        .ball-stroke {
-            stroke: var(--accent-ball);
-        }
-        .ball-fill {
-            fill: var(--accent-ball);
+        .accent-fill {
+            fill: var(--accent);
         }
         .text-title {
             fill: var(--text-title);
@@ -56,16 +48,16 @@
             fill: var(--text-badge);
         }
         .badge-rect-dev {
-            fill: var(--accent-robot);
+            fill: var(--accent);
             fill-opacity: 0.12;
-            stroke: var(--accent-robot);
+            stroke: var(--accent);
             stroke-opacity: 0.3;
         }
         .badge-rect-gh {
             stroke: var(--badge-border);
         }
         .divider {
-            stroke: var(--accent-robot);
+            stroke: var(--accent);
         }
     </style>
 
@@ -75,27 +67,27 @@
     <!-- Centered Visual Icon group -->
     <g transform="translate(340, -50)" filter="url(#glow)">
         <!-- Humanoid robot head profile -->
-        <circle cx="180" cy="280" r="60" fill="none" class="robot-stroke" stroke-width="8"/>
-        <path d="M 180 220 L 140 170 M 180 220 L 220 170" fill="none" class="robot-stroke" stroke-width="6" stroke-linecap="round"/>
-        <circle cx="140" cy="170" r="10" class="robot-fill"/>
-        <circle cx="220" cy="170" r="10" class="robot-fill"/>
-        
+        <circle cx="180" cy="280" r="60" fill="none" class="accent-stroke" stroke-width="8"/>
+        <path d="M 180 220 L 140 170 M 180 220 L 220 170" fill="none" class="accent-stroke" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="140" cy="170" r="10" class="accent-fill"/>
+        <circle cx="220" cy="170" r="10" class="accent-fill"/>
+
         <!-- Glowing ball and target viewport crosshair -->
-        <circle cx="340" cy="320" r="40" fill="none" class="ball-stroke" stroke-width="8"/>
-        <circle cx="340" cy="320" r="15" class="ball-fill"/>
-        
+        <circle cx="340" cy="320" r="40" fill="none" class="accent-stroke" stroke-width="8"/>
+        <circle cx="340" cy="320" r="15" class="accent-fill"/>
+
         <!-- Camera crosshairs -->
-        <path d="M 340 260 L 340 290 M 340 380 L 340 350 M 280 320 L 310 320 M 400 320 L 370 320" fill="none" class="ball-stroke" stroke-width="4" stroke-linecap="round"/>
+        <path d="M 340 260 L 340 290 M 340 380 L 340 350 M 280 320 L 310 320 M 400 320 L 370 320" fill="none" class="accent-stroke" stroke-width="4" stroke-linecap="round"/>
     </g>
 
     <!-- Centered information block (Text) -->
     <g transform="translate(600, 360)">
         <!-- Project Title -->
         <text x="0" y="30" font-family="'SF Pro Display', -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif" font-size="28" font-weight="900" letter-spacing="1.2" class="text-title" text-anchor="middle">NAO BALL PICKUP</text>
-        
+
         <!-- Center-aligned Divider line -->
         <line x1="-200" y1="65" x2="200" y2="65" class="divider" stroke-width="3" stroke-linecap="round"/>
-        
+
         <!-- Tagline / Subtitle -->
         <text x="0" y="110" font-family="'SF Pro Text', -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif" font-size="16" font-weight="500" class="text-subtitle" letter-spacing="0.5" text-anchor="middle">HSV Segmentation &amp; Keyframe Pickup for Humanoid Robotics</text>
 
