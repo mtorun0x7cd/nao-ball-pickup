@@ -232,7 +232,7 @@ This is an archived academic project and is not actively maintained. It connects
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
-## Author
+## Contact
 
 **Mert Torun, M.Sc.** — IT Security Architect · Systems Engineer  
 mtorun0x7cd · Research & Development
