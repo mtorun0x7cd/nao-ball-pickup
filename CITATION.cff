@@ -8,8 +8,8 @@ abstract: >-
   control, and executes a 23-joint keyframe pickup motion authored in
   Choregraphe. Vision runs on VGA frames from the robot's bottom camera via the
   NAOqi SDK, with an event-driven architecture decoupling acquisition,
-  detection, and actuation. Developed as a team project at TH Köln (Cologne
-  University of Applied Sciences).
+  detection, and actuation. Developed as a team project at TH Köln
+  (University of Applied Sciences).
 authors:
   - given-names: Mert
     family-names: Torun

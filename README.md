@@ -37,7 +37,7 @@ The committed source is preserved as-is from its student-project state. It targe
 
 | Dimension | Detail |
 | :--- | :--- |
-| **Institution** | TH Köln (Cologne University of Applied Sciences) |
+| **Institution** | TH Köln (University of Applied Sciences) |
 | **Program** | Computer Science & Engineering (Technische Informatik) (M.Sc.) |
 | **Course** | Special Aspects of Mobile Autonomous Systems |
 | **Semester** | Winter 2021/2022 |
