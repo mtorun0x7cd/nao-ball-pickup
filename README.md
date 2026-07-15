@@ -126,7 +126,7 @@ Design-time intermediate poses are tabulated in [the joint-positions reference](
 
 | Category | Technologies |
 | ---------- | ------------- |
-| Language | Python 2.7.0 |
+| Language | Python 2.7 |
 | Vision | OpenCV 4.2.0, NumPy, Pillow, imutils |
 | Robot SDK | NAOqi (`ALMotion`, `ALVideoDevice`, `ALRobotPosture`, `ALMemory`) |
 | Motion authoring | Choregraphe (animation mode) |
