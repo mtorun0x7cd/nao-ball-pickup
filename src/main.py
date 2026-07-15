@@ -1,4 +1,3 @@
-# Author: Mert Torun (mtorun0x7cd)
 from time import sleep
 from robot import Robot
 from recognition import Recognition
