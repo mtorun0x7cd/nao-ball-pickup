@@ -1,0 +1,6 @@
+# Archived Python 2.7 project. Pinned to the last releases that ship
+# Python 2.7 wheels. The NAOqi Python SDK is installed separately (pynaoqi).
+opencv-python==4.2.0.32
+numpy==1.16.6
+Pillow==6.2.2
+imutils==0.5.4

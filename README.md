@@ -174,7 +174,7 @@ nao-ball-pickup/
 ### Installation
 
 ```bash
-pip install opencv-python numpy Pillow imutils
+pip install -r requirements.txt
 ```
 
 ### Configuration
