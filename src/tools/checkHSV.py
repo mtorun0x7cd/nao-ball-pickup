@@ -1,7 +1,3 @@
-# Adapted from the imutils "range-detector" utility by Adrian Rosebrock
-# (PyImageSearch), used under the MIT License. See NOTICE for the upstream
-# copyright and license text.
-# Upstream: https://github.com/PyImageSearch/imutils (bin/range-detector)
 import cv2
 import argparse
 from operator import xor

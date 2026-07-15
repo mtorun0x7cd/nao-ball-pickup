@@ -94,7 +94,7 @@ graph LR
 | `recognition.py` | HSV masking, contour detection, ball position extraction, proportional head tracking |
 | `Controller.py` | Generic PD controller class with configurable gains and output clamping (see note below) |
 | `EventHook.py` | Observer pattern for decoupled event propagation (`+=` / `-=` syntax) |
-| `tools/checkHSV.py` | Standalone HSV/RGB calibration utility with OpenCV trackbars |
+| `tools/checkHSV.py` | Standalone HSV/RGB calibration utility with OpenCV trackbars, adapted from the imutils range-detector (see [`NOTICE`](NOTICE)) |
 
 ### Head Tracking
 
