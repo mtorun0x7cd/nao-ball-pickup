@@ -153,7 +153,7 @@ nao-ball-pickup/
 │   ├── social_preview_dark.png   # Header render (dark theme)
 │   ├── social_card.png           # Social-share card
 │   ├── render.sh                 # SVG-to-PNG render script
-│   └── *.pdf                     # Report, presentation, project idea, joint-position reference
+│   └── Project_JointPositions*.pdf # Joint-position reference for keyframe design
 ├── .github/workflows/     # CI pipeline
 ├── CITATION.cff
 ├── SECURITY.md
@@ -204,9 +204,6 @@ python src/main.py
 
 | Document | Description |
 | ---------- | ------------- |
-| [Report.pdf](docs/Report.pdf) | Full technical report covering design, implementation, and results |
-| [Project presentation.pdf](docs/Project%20presentation.pdf) | Slide deck summarizing the approach and findings |
-| [Project idea.pdf](docs/Project%20idea.pdf) | Initial project proposal |
 | [Joint Positions Reference](docs/Project_JointPositions%20-%20Project_JointPositions.pdf) | NAO joint-position data used for keyframe design |
 
 ## References
