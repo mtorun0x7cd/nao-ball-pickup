@@ -23,13 +23,16 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
       - name: Package application
-        run: zip -r nao-ball-pickup.zip src LICENSE README.md
+        # Staged under .tmp.nosync/ so no build state lands in the source tree.
+        run: |
+          mkdir -p .tmp.nosync/dist
+          zip -r .tmp.nosync/dist/nao-ball-pickup.zip src LICENSE README.md
 
       - name: Upload build artifact
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: nao-ball-pickup
-          path: nao-ball-pickup.zip
+          path: .tmp.nosync/dist/*
           if-no-files-found: error
 
   release:
