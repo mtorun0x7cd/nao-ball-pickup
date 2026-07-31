@@ -25,7 +25,7 @@
 
 This project implements a perception-action pipeline for the SoftBank NAO 6 humanoid robot: it detects a colored ball on the ground, tracks it with head movements, and executes a full-body pickup motion. The system combines computer vision with proportional head control and a choreographed multi-joint animation on a 25-DOF bipedal platform. Its scope is deliberately narrow — the ball is hand-placed within a fixed reachable zone and the robot neither searches for nor walks toward it; the project report (co-authored coursework, not included in this archive) frames the outcome as a working but limited first attempt.
 
-The vision pipeline operates on VGA frames (640×480) streamed from the robot's bottom camera via the NAOqi SDK. Each frame undergoes Gaussian blur, BGR-to-HSV conversion, `inRange` thresholding, and morphological filtering (erosion + dilation) to isolate the target ball. Contour extraction followed by minimum-enclosing-circle computation yields the ball's pixel-space position and apparent radius. A proportional feedback term then drives the head yaw and pitch angles to center the ball in the field of view.
+The vision pipeline operates on VGA frames (640×480) streamed from the robot's bottom camera via the NAOqi SDK [3]. Each frame undergoes Gaussian blur, BGR-to-HSV conversion [2], [6], `inRange` thresholding, and morphological filtering (erosion + dilation) to isolate the target ball. Contour extraction followed by minimum-enclosing-circle computation yields the ball's pixel-space position and apparent radius. A proportional feedback term then drives the head yaw and pitch angles to center the ball in the field of view.
 
 Once the ball is centered and the head angles fall within fixed thresholds, an event-driven observer (`EventHook`) triggers a 9-keyframe pickup animation spanning 23 joints. The motion is interpolated via `ALMotion.angleInterpolation()`, after which the robot returns to a standing posture.
 
@@ -38,14 +38,14 @@ The committed source is preserved as-is from its student-project state. It targe
 | Dimension | Detail |
 | :--- | :--- |
 | **Institution** | TH Köln (University of Applied Sciences) |
-| **Program** | Computer Science & Engineering (Technische Informatik) (M.Sc.) |
+| **Program** | Computer Science & Engineering (Technische Informatik), M.Sc. |
 | **Course** | Special Aspects of Mobile Autonomous Systems |
 | **Semester** | Winter 2021/2022 |
 | **Type** | Team |
 
 ## Features
 
-- **Threaded camera streaming** — A dedicated `VideoStream` thread subscribes to the NAOqi `ALVideoDevice` API at VGA resolution and a requested 30 fps, dispatching each frame as an event. Both cameras are subscribed, but only the bottom camera's acquisition thread is started — the reachable floor area lies outside the top camera's field of view.
+- **Threaded camera streaming** — A dedicated `VideoStream` thread subscribes to the NAOqi `ALVideoDevice` API at VGA resolution and a requested 30 fps, dispatching each frame as an event — both cameras are subscribed, but only the bottom camera's acquisition thread is started, since the reachable floor area lies outside the top camera's field of view
 - **HSV color-space ball detection** — Gaussian blur → HSV conversion → `inRange` thresholding → erosion/dilation → contour extraction → minimum-enclosing-circle computation, with committed thresholds (`HSV_MIN = (165, 130, 116)`, `HSV_MAX = (255, 255, 255)`) that admit only hue 165–179 on OpenCV's 0–179 scale — the red end of the spectrum — although the source names the target color as orange
 - **Proportional head tracking** — An inline proportional correction (`Δangle = 0.007 · pixel_error`) drives the head yaw and pitch to center the ball on pixel coordinate `(320, 240)`, with a ±10 px dead zone per axis to suppress jitter
 - **23-joint keyframe animation** — A 9-keyframe pickup sequence across both arms, both legs, and the hip joints, authored in Choregraphe's animation mode and interpolated via `angleInterpolation` for smooth full-body motion
@@ -60,7 +60,7 @@ The system follows a pipeline architecture with event-driven data flow between d
 ```text
 ┌─────────────┐     ImageEvent      ┌─────────────────┐    followBall()    ┌───────────────┐
 │ VideoStream │ ──────────────────► │   Recognition   │ ─────────────────► │ Head Tracking │
-│  (Thread)   │   fire(image,w,h)   │  HSV + Contours │   setHeadAngle()   │ (P, Yaw/Pitch)│
+│  (Thread)   │      fire(...)      │  HSV + Contours │   setHeadAngle()   │ (P, Yaw/Pitch)│
 └─────────────┘                     └────────┬────────┘                    └───────────────┘
        ▲                                     │
        │                                     │ CanPickup.fire()
@@ -105,19 +105,19 @@ Head tracking keeps the detected ball centered on `(320, 240)` in the 640×480 V
 - **Correction**: `Δyaw = 0.007 · (x − 320)`, `Δpitch = −0.007 · (y − 240)` — pure proportional, with no output clamping in the shipped path
 - **Update rate**: tied to the effective camera throughput (≈1–4 fps under the remote-processing setup, not the nominal 30 fps subscription)
 
-A generic proportional-derivative controller is provided separately in `Controller.py`:
+A generic proportional-derivative controller [1] is provided separately in `Controller.py`:
 
 $$u = K_p\,e + K_d\,(e_{t-1} - e_t)$$
 
-`Recognition.__init__` constructs two `PD` instances (`P = 0.005`, `D = 0`, output clamp `0.15`), and the project report describes the angle correction as PD control. In the committed source, however, those instances are not invoked by `followBall`, so the executed controller is the proportional term above (gain `0.007`); with `D = 0` the class would in any case reduce to proportional control. The `PD` class remains available for callers that wish to use it.
+`Recognition.__init__` constructs two `PD` instances (`P = 0.005`, `D = 0`, output clamp `0.15`), and the project report describes the angle correction as PD control. In the committed source, however, those instances are not invoked by `followBall`, so the executed controller is the proportional term above (gain `0.007`); with `D = 0` the class would in any case reduce to proportional control.
 
 ### Keyframe Animation
 
-The pickup motion is a 9-keyframe sequence across 23 joints (both arms, both legs, hip), authored in Choregraphe's animation mode by recording intermediate poses and reading out their joint angles:
+The pickup motion is a 9-keyframe sequence across 23 joints (both arms, both legs, hip), authored in Choregraphe's animation mode [5] by recording intermediate poses and reading out their joint angles:
 
 - **Timeline**: keyframes at `t = [4, 8, 12, 16, 20, 22, 26, 30, 34]` s (`angleInterpolation` takes its time list in seconds, so the sequence spans 34 s)
 - **Joints**: `LHand`, `RHand`, `L/RAnklePitch`, `L/RAnkleRoll`, `L/RElbowRoll`, `L/RElbowYaw`, `L/RHipPitch`, `L/RHipRoll`, `LHipYawPitch`, `L/RKneePitch`, `L/RShoulderPitch`, `L/RShoulderRoll`, `L/RWristYaw`
-- **Execution**: interpolated via `ALMotion.angleInterpolation()`
+- **Execution**: interpolated via `ALMotion.angleInterpolation()` [4]
 - **Post-motion**: the robot transitions to a `Crouch` posture, then back to `Stand`
 
 Design-time intermediate poses are tabulated in [the joint-positions reference](docs/Project_JointPositions%20-%20Project_JointPositions.pdf); the shipped keyframe arrays were further hand-tuned and diverge from it (the reference lists five poses to the code's nine, and several joints — including the hand open/close states — differ).
