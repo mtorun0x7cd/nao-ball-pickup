@@ -26,7 +26,7 @@ jobs:
         # Staged under .tmp.nosync/ so no build state lands in the source tree.
         run: |
           mkdir -p .tmp.nosync/dist
-          zip -r .tmp.nosync/dist/nao-ball-pickup.zip src LICENSE README.md
+          zip -r .tmp.nosync/dist/nao-ball-pickup.zip src LICENSE NOTICE README.md
 
       - name: Upload build artifact
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
