@@ -23,7 +23,7 @@
 
 ## Overview
 
-This project implements a perception-action pipeline for the SoftBank NAO 6 humanoid robot: it detects a colored ball on the ground, tracks it with head movements, and executes a full-body pickup motion. The system combines computer vision with proportional head control and a choreographed multi-joint animation on a 25-DOF bipedal platform. Its scope is deliberately narrow — the ball is hand-placed within a fixed reachable zone and the robot neither searches for nor walks toward it; the project report frames the outcome as a working but limited first attempt.
+This project implements a perception-action pipeline for the SoftBank NAO 6 humanoid robot: it detects a colored ball on the ground, tracks it with head movements, and executes a full-body pickup motion. The system combines computer vision with proportional head control and a choreographed multi-joint animation on a 25-DOF bipedal platform. Its scope is deliberately narrow — the ball is hand-placed within a fixed reachable zone and the robot neither searches for nor walks toward it; the project report (co-authored coursework, not included in this archive) frames the outcome as a working but limited first attempt.
 
 The vision pipeline operates on VGA frames (640×480) streamed from the robot's bottom camera via the NAOqi SDK. Each frame undergoes Gaussian blur, BGR-to-HSV conversion, `inRange` thresholding, and morphological filtering (erosion + dilation) to isolate the target ball. Contour extraction followed by minimum-enclosing-circle computation yields the ball's pixel-space position and apparent radius. A proportional feedback term then drives the head yaw and pitch angles to center the ball in the field of view.
 
@@ -46,7 +46,7 @@ The committed source is preserved as-is from its student-project state. It targe
 ## Features
 
 - **Threaded camera streaming** — A dedicated `VideoStream` thread subscribes to the NAOqi `ALVideoDevice` API at VGA resolution and a requested 30 fps, dispatching each frame as an event. Both cameras are subscribed, but only the bottom camera's acquisition thread is started — the reachable floor area lies outside the top camera's field of view.
-- **HSV color-space ball detection** — Gaussian blur → HSV conversion → `inRange` thresholding → erosion/dilation → contour extraction → minimum-enclosing-circle computation, calibrated for an orange test ball
+- **HSV color-space ball detection** — Gaussian blur → HSV conversion → `inRange` thresholding → erosion/dilation → contour extraction → minimum-enclosing-circle computation, with committed thresholds (`HSV_MIN = (165, 130, 116)`, `HSV_MAX = (255, 255, 255)`) that admit only hue 165–179 on OpenCV's 0–179 scale — the red end of the spectrum — although the source names the target color as orange
 - **Proportional head tracking** — An inline proportional correction (`Δangle = 0.007 · pixel_error`) drives the head yaw and pitch to center the ball on pixel coordinate `(320, 240)`, with a ±10 px dead zone per axis to suppress jitter
 - **23-joint keyframe animation** — A 9-keyframe pickup sequence across both arms, both legs, and the hip joints, authored in Choregraphe's animation mode and interpolated via `angleInterpolation` for smooth full-body motion
 - **Event-driven architecture** — A custom `EventHook` observer (with `+=` / `-=` syntax) decouples camera frames from detection (`ImageEvent`) and detection from the pickup trigger (`CanPickup`)
@@ -115,7 +115,7 @@ $$u = K_p\,e + K_d\,(e_{t-1} - e_t)$$
 
 The pickup motion is a 9-keyframe sequence across 23 joints (both arms, both legs, hip), authored in Choregraphe's animation mode by recording intermediate poses and reading out their joint angles:
 
-- **Timeline**: keyframes at `t = [4, 8, 12, 16, 20, 22, 26, 30, 34]` (NAOqi time units)
+- **Timeline**: keyframes at `t = [4, 8, 12, 16, 20, 22, 26, 30, 34]` s (`angleInterpolation` takes its time list in seconds, so the sequence spans 34 s)
 - **Joints**: `LHand`, `RHand`, `L/RAnklePitch`, `L/RAnkleRoll`, `L/RElbowRoll`, `L/RElbowYaw`, `L/RHipPitch`, `L/RHipRoll`, `LHipYawPitch`, `L/RKneePitch`, `L/RShoulderPitch`, `L/RShoulderRoll`, `L/RWristYaw`
 - **Execution**: interpolated via `ALMotion.angleInterpolation()`
 - **Post-motion**: the robot transitions to a `Crouch` posture, then back to `Stand`
@@ -148,27 +148,30 @@ nao-ball-pickup/
 │   └── tools/
 │       └── checkHSV.py    # HSV calibration utility
 ├── docs/
-│   ├── social_preview.svg        # Repository header graphic (theme-adaptive)
-│   ├── social_preview_light.png  # Header render (light theme)
-│   ├── social_preview_dark.png   # Header render (dark theme)
-│   ├── social_card.png           # Social-share card
-│   ├── render.sh                 # SVG-to-PNG render script
+│   ├── social_preview.svg          # Repository header graphic (theme-adaptive)
+│   ├── social_preview_light.png    # Header render (light theme)
+│   ├── social_preview_dark.png     # Header render (dark theme)
+│   ├── social_card.png             # Social-share card
+│   ├── render.sh                   # SVG-to-PNG render script
 │   └── Project_JointPositions*.pdf # Joint-position reference for keyframe design
-├── .github/workflows/     # CI pipeline
+├── .github/               # CI workflows, funding, dependabot
 ├── CITATION.cff
+├── CONTRIBUTING.md
+├── NOTICE
+├── requirements.txt
 ├── SECURITY.md
 ├── LICENSE
 └── README.md
 ```
 
-(Repository dotfiles — `.gitignore`, `.gitattributes`, `.editorconfig` — are omitted from this view.)
+(Repository dotfiles and tooling configuration are omitted from this view.)
 
 ## Getting Started
 
 ### Prerequisites
 
 - A SoftBank NAO 6 robot accessible on the local network
-- Python 2.7 with the NAOqi Python SDK installed ([pynaoqi installation guide](http://doc.aldebaran.com/2-1/dev/python/install_guide.html))
+- Python 2.7 with the NAOqi Python SDK installed ([pynaoqi installation guide](http://doc.aldebaran.com/2-8/dev/python/install_guide.html))
 - OpenCV with Python bindings, plus NumPy, Pillow, and imutils
 
 ### Installation
@@ -200,11 +203,15 @@ export PYTHONPATH=/path/to/pynaoqi-python2.7-<version>-linux64:$PYTHONPATH
 python src/main.py
 ```
 
+These steps record the original invocation; the archived source does not run unmodified (see [Overview](#overview)).
+
 ## Documentation
 
 | Document | Description |
 | ---------- | ------------- |
 | [Joint Positions Reference](docs/Project_JointPositions%20-%20Project_JointPositions.pdf) | NAO joint-position data used for keyframe design |
+
+The project report, presentation and proposal are co-authored coursework and are not part of this archive.
 
 ## References
 
@@ -212,11 +219,11 @@ python src/main.py
 
 [2] OpenCV Documentation, "Color Space Conversions," [https://docs.opencv.org/4.x/de/d25/imgproc_color_conversions.html](https://docs.opencv.org/4.x/de/d25/imgproc_color_conversions.html)
 
-[3] SoftBank Robotics, "NAOqi Developer Guide," [http://doc.aldebaran.com/2-1/index_dev_guide.html](http://doc.aldebaran.com/2-1/index_dev_guide.html)
+[3] SoftBank Robotics, "NAOqi Developer Guide," [http://doc.aldebaran.com/2-8/index_dev_guide.html](http://doc.aldebaran.com/2-8/index_dev_guide.html)
 
-[4] SoftBank Robotics, "ALMotion API — angleInterpolation," [http://doc.aldebaran.com/2-1/naoqi/motion/control-joint-api.html](http://doc.aldebaran.com/2-1/naoqi/motion/control-joint-api.html)
+[4] SoftBank Robotics, "ALMotion API — angleInterpolation," [http://doc.aldebaran.com/2-8/naoqi/motion/control-joint-api.html](http://doc.aldebaran.com/2-8/naoqi/motion/control-joint-api.html)
 
-[5] SoftBank Robotics, "Choregraphe Suite," [http://doc.aldebaran.com/2-1/software/choregraphe/index.html](http://doc.aldebaran.com/2-1/software/choregraphe/index.html)
+[5] SoftBank Robotics, "Choregraphe Suite," [http://doc.aldebaran.com/2-8/software/choregraphe/index.html](http://doc.aldebaran.com/2-8/software/choregraphe/index.html)
 
 [6] R. Szeliski, *Computer Vision: Algorithms and Applications*, Springer, 2010. Chapter 2.3: Color Spaces (HSV).
 

@@ -29,8 +29,11 @@ maintenance backlog:
   network protocol with no application-level authentication; anyone able to reach
   the robot's control port on the network segment can drive it.
 - **No input or failure handling.** Detection thresholds, head-tracking gains,
-  and the pickup keyframes are hard-coded for a specific test setup; the robot
-  has no balance feedback, so an out-of-distribution pose can cause it to fall.
+  and the pickup keyframes are hard-coded for a specific test setup, and the
+  pickup drives raw joint trajectories with no whole-body balance control, so an
+  out-of-distribution pose can push the center of mass outside the support
+  polygon; NAOqi's fall manager mitigates the impact but does not prevent the
+  fall.
 - **No tests.** The repository ships no automated tests; correctness was assessed
   by observing the physical robot.
 
